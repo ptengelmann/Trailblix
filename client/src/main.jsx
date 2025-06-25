@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './index.css'; // 🔥 THIS IS CRITICAL - Import your global CSS reset
 import App from './App.jsx';
-// REMOVED BrowserRouter import
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

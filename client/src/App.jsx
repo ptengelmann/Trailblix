@@ -45,7 +45,7 @@ const OnboardingRoute = ({ children }) => {
 
 const AppContent = () => {
   return (
-    <div style={{ minHeight: '100vh', width: '100%' }}>
+    <div className="page-container">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
