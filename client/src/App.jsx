@@ -1,7 +1,8 @@
 // App.jsx
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
 import Register from './pages/Auth/Register';
@@ -42,44 +43,47 @@ const OnboardingRoute = ({ children }) => {
   return children;
 };
 
-const AppRoutes = () => {
+const AppContent = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route 
-        path="/login" 
-        element={
-          <AuthRoute>
-            <Login />
-          </AuthRoute>
-        } 
-      />
-      <Route 
-        path="/register" 
-        element={
-          <AuthRoute>
-            <Register />
-          </AuthRoute>
-        } 
-      />
-      <Route 
-        path="/onboarding" 
-        element={
-          <OnboardingRoute>
-            <AdvancedOnboarding />
-          </OnboardingRoute>
-        } 
-      />
-      <Route 
-        path="/dashboard" 
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        } 
-      />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div style={{ minHeight: '100vh', width: '100%' }}>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route 
+          path="/login" 
+          element={
+            <AuthRoute>
+              <Login />
+            </AuthRoute>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <AuthRoute>
+              <Register />
+            </AuthRoute>
+          } 
+        />
+        <Route 
+          path="/onboarding" 
+          element={
+            <OnboardingRoute>
+              <AdvancedOnboarding />
+            </OnboardingRoute>
+          } 
+        />
+        <Route 
+          path="/dashboard" 
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
   );
 };
 
@@ -87,7 +91,7 @@ const App = () => {
   return (
     <Router>
       <AuthProvider>
-        <AppRoutes />
+        <AppContent />
       </AuthProvider>
     </Router>
   );

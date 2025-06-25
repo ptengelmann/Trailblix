@@ -15,26 +15,6 @@ const HeroSection = () => {
         <div className={styles.gradientOrb3}></div>
       </div>
       
-      <nav className={styles.navbar}>
-        <div className={styles.navBrand}>
-          <Brain size={28} />
-          <span>Trailblix</span>
-        </div>
-        <div className={styles.navActions}>
-          <button 
-            className={styles.loginBtn}
-            onClick={() => navigate('/login')}
-          >
-            Login
-          </button>
-          <button 
-            className={styles.signupBtn}
-            onClick={() => navigate('/register')}
-          >
-            Get Started
-          </button>
-        </div>
-      </nav>
 
       <div className={styles.heroContent}>
         <div className={styles.heroMain}>

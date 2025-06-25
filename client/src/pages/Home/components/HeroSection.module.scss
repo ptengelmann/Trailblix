@@ -6,7 +6,9 @@
   flex-direction: column;
   background: radial-gradient(ellipse at top, #1a1a2e 0%, #0f0f23 100%);
   overflow: hidden;
+  padding-top: 80px; /* CHANGE FROM 70px TO 80px */
 }
+
 
 .heroBackground {
   position: absolute;
@@ -46,79 +48,6 @@
     top: 60%;
     right: 60%;
     animation-delay: 14s;
-  }
-}
-
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px 40px;
-  background: rgba(15, 15, 35, 0.8);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: relative;
-  z-index: 10;
-  
-  @media (max-width: 768px) {
-    padding: 16px 20px;
-  }
-}
-
-.navBrand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 1.5rem;
-  font-weight: 700;
-  
-  svg {
-    color: #00D9FF;
-  }
-  
-  span {
-    background: linear-gradient(135deg, #00D9FF, #8A00FF);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-}
-
-.navActions {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.loginBtn {
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  
-  &:hover {
-    border-color: #00D9FF;
-    background: rgba(0, 217, 255, 0.1);
-  }
-}
-
-.signupBtn {
-  background: linear-gradient(135deg, #8A00FF, #00D9FF);
-  border: none;
-  color: white;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 600;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px rgba(138, 0, 255, 0.3);
   }
 }
 

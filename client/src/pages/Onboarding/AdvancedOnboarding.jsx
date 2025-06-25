@@ -23,6 +23,8 @@ import {
   Building,
   Globe
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';  // ADD THIS
+import { useAuth } from '../../context/AuthContext';  // ADD THIS
 import styles from './advancedOnboarding.module.scss';
 
 const ONBOARDING_STEPS = [
@@ -94,7 +96,9 @@ const WORK_VALUES = [
   { name: 'Recognition', icon: Target }
 ];
 
-const AdvancedOnboarding = ({ onComplete }) => {
+const AdvancedOnboarding = () => {  // REMOVE onComplete prop
+  const { updateUser } = useAuth();  // ADD THIS
+  const navigate = useNavigate();   // ADD THIS
   const [currentStep, setCurrentStep] = useState(0);
   const [userData, setUserData] = useState({
     skills: [],
@@ -144,7 +148,8 @@ const submitProfile = async () => {
     
     if (response.ok) {
       const result = await response.json();
-      onComplete(result);
+      updateUser(result.user);     // CHANGE TO THIS
+      navigate('/dashboard');      // ADD THIS LINE
     }
   } catch (error) {
     console.error('Profile submission failed:', error);
