@@ -602,3 +602,91 @@
     top: 70px;
   }
 }
+
+// Add these styles to your Navbar.module.scss file
+
+.userMenu {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  
+  .userName {
+    color: white;
+    font-weight: 500;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+  
+  .dashboardBtn, 
+  .logoutBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  
+  .dashboardBtn {
+    background: rgba(138, 0, 255, 0.2);
+    color: #8A00FF;
+    
+    &:hover {
+      background: rgba(138, 0, 255, 0.3);
+      transform: translateY(-2px);
+    }
+  }
+  
+  .logoutBtn {
+    background: rgba(239, 68, 68, 0.1);
+    color: #EF4444;
+    
+    &:hover {
+      background: rgba(239, 68, 68, 0.2);
+      transform: translateY(-2px);
+    }
+  }
+}
+
+// For mobile menu
+.mobileUserInfo {
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+  
+  span {
+    color: white;
+    font-weight: 500;
+  }
+}
+
+.mobileDashboardBtn, 
+.mobileLogoutBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+  border: none;
+}
+
+.mobileDashboardBtn {
+  background: rgba(138, 0, 255, 0.2);
+  color: #8A00FF;
+}
+
+.mobileLogoutBtn {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+}

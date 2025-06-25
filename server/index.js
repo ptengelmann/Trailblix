@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
 import userRoutes from './routes/users.js';
-import authRoutes from './routes/auth.js';  // ADD THIS LINE
+import authRoutes from './routes/auth.js';
+import notificationsRoutes from './routes/notifications.js'; // Add this line
 import { log } from './utils/logger.js';
 
 dotenv.config();
@@ -15,7 +16,8 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/users', userRoutes);
-app.use('/api/auth', authRoutes);  // ADD THIS LINE
+app.use('/api/auth', authRoutes);
+app.use('/api/notifications', notificationsRoutes); // Add this line
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

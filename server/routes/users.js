@@ -202,4 +202,58 @@ router.post('/:id/feedback', async (req, res) => {
   }
 });
 
+// GET /api/users/dashboard - Get user dashboard data
+router.get('/dashboard', authenticateToken, async (req, res) => {
+  try {
+    log("📊 Dashboard data request", req.user._id);
+    
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    
+    // Generate fresh career recommendations using advanced engine
+    const userProfile = {
+      skills: user.skills || [],
+      interests: user.interests || [],
+      personality: user.personality || [],
+      workValues: user.workValues || [],
+      yearsOfExperience: user.yearsOfExperience || 0,
+      preferences: user.preferences || {}
+    };
+    
+    const recommendations = advancedCareerEngine.generateCareerMatches(userProfile);
+    
+    // Return dashboard data
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      currentRole: user.currentRole,
+      yearsOfExperience: user.yearsOfExperience,
+      skills: user.skills || [],
+      interests: user.interests || [],
+      personality: user.personality || [],
+      workValues: user.workValues || [],
+      preferences: user.preferences || {},
+      onboardingCompleted: user.onboardingCompleted,
+      completionPercentage: user.completionPercentage,
+      careerGoals: user.careerGoals || [],
+      careerRecommendations: recommendations.slice(0, 5).map(match => ({
+        careerId: match.id,
+        title: match.title,
+        confidence: match.confidence,
+        category: match.category
+      }))
+    });
+    
+  } catch (err) {
+    log("❌ Dashboard fetch error", err);
+    res.status(500).json({ error: 'Failed to fetch dashboard data' });
+  }
+});
+
+
 export default router;

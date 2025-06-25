@@ -24,7 +24,7 @@ import {
   Globe
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';  // ADD THIS
-import { useAuth } from '../../context/AuthContext';  // ADD THIS
+import { useAuth } from '../../context/useAuth';
 import styles from './advancedOnboarding.module.scss';
 
 const ONBOARDING_STEPS = [
@@ -97,7 +97,7 @@ const WORK_VALUES = [
 ];
 
 const AdvancedOnboarding = () => {  // REMOVE onComplete prop
-  const { updateUser } = useAuth();  // ADD THIS
+  const { user, completeOnboarding, updateUser } = useAuth();  // Add completeOnboarding
   const navigate = useNavigate();   // ADD THIS
   const [currentStep, setCurrentStep] = useState(0);
   const [userData, setUserData] = useState({
@@ -136,21 +136,33 @@ const AdvancedOnboarding = () => {  // REMOVE onComplete prop
 
 const submitProfile = async () => {
   try {
-    const token = localStorage.getItem('trailblix_token');
-    const response = await fetch('/api/users/profile', {
-      method: 'POST',
-      headers: { 
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify(userData)
-    });
-    
-    if (response.ok) {
-      const result = await response.json();
-      updateUser(result.user);     // CHANGE TO THIS
-      navigate('/dashboard');      // ADD THIS LINE
+    // First, try to submit to API if it exists
+    try {
+      const token = localStorage.getItem('trailblix_token');
+      const response = await fetch('/api/users/profile', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(userData)
+      });
+      
+      if (response.ok) {
+        const result = await response.json();
+        updateUser({
+          ...result.user,
+          onboardingCompleted: true  // Ensure this flag is set
+        });
+      }
+    } catch (apiError) {
+      console.warn('API submission failed, using local onboarding completion', apiError);
+      // If API fails, just complete onboarding locally
+      await completeOnboarding();
     }
+    
+    // Whether API succeeds or fails, navigate to dashboard
+    navigate('/dashboard');
   } catch (error) {
     console.error('Profile submission failed:', error);
   }
@@ -915,10 +927,15 @@ const CompletionStep = ({ userData, onSubmit }) => {
  const [isSubmitting, setIsSubmitting] = useState(false);
 
  const handleSubmit = async () => {
-   setIsSubmitting(true);
-   await onSubmit();
-   setIsSubmitting(false);
- };
+    setIsSubmitting(true);
+    try {
+      await onSubmit();
+    } catch (error) {
+      console.error('Error completing onboarding:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
  const completionStats = {
    skills: userData.skills?.length || 0,

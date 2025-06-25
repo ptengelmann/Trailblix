@@ -1,6 +1,6 @@
-// src/components/Navbar/Navbar.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth'; 
 import { 
   Brain, 
   Menu, 
@@ -14,21 +14,18 @@ import {
   Zap,
   ArrowRight,
   Star,
-  BarChart3
+  BarChart3,
+  LogOut 
 } from 'lucide-react';
 import styles from './Navbar.module.scss';
 
 const Navbar = () => {
+  const { user, logout } = useAuth(); 
   const navigate = useNavigate();
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState(null);
-
-  // Don't show navbar on dashboard or onboarding
-  if (location.pathname === '/dashboard' || location.pathname === '/onboarding') {
-    return null;
-  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,6 +34,16 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Don't show navbar on dashboard or onboarding
+  if (location.pathname === '/dashboard' || location.pathname === '/onboarding') {
+    return null;
+  }
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
 
   const features = [
     {
@@ -211,20 +218,43 @@ const Navbar = () => {
             </div>
           </div>
           
-          <button 
-            className={styles.loginBtn}
-            onClick={() => navigate('/login')}
-          >
-            Sign In
-          </button>
-          
-          <button 
-            className={styles.signupBtn}
-            onClick={() => navigate('/register')}
-          >
-            <Zap size={16} />
-            Get Started Free
-          </button>
+          {user ? (
+            // Show user menu if logged in
+            <div className={styles.userMenu}>
+              <span className={styles.userName}>{user.name}</span>
+              <button 
+                className={styles.dashboardBtn}
+                onClick={() => navigate('/dashboard')}
+              >
+                Dashboard
+              </button>
+              <button 
+                className={styles.logoutBtn}
+                onClick={handleLogout}
+              >
+                <LogOut size={16} />
+                Logout
+              </button>
+            </div>
+          ) : (
+            // Show login/signup buttons if not logged in
+            <>
+              <button 
+                className={styles.loginBtn}
+                onClick={() => navigate('/login')}
+              >
+                Sign In
+              </button>
+              
+              <button 
+                className={styles.signupBtn}
+                onClick={() => navigate('/register')}
+              >
+                <Zap size={16} />
+                Get Started Free
+              </button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -265,19 +295,42 @@ const Navbar = () => {
             </div>
 
             <div className={styles.mobileActions}>
-              <button 
-                className={styles.mobileLoginBtn}
-                onClick={() => navigate('/login')}
-              >
-                Sign In
-              </button>
-              <button 
-                className={styles.mobileSignupBtn}
-                onClick={() => navigate('/register')}
-              >
-                <Zap size={16} />
-                Start Free Assessment
-              </button>
+              {user ? (
+                <>
+                  <div className={styles.mobileUserInfo}>
+                    <span>Welcome, {user.name}</span>
+                  </div>
+                  <button 
+                    className={styles.mobileDashboardBtn}
+                    onClick={() => navigate('/dashboard')}
+                  >
+                    Dashboard
+                  </button>
+                  <button 
+                    className={styles.mobileLogoutBtn}
+                    onClick={handleLogout}
+                  >
+                    <LogOut size={16} />
+                    Logout
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button 
+                    className={styles.mobileLoginBtn}
+                    onClick={() => navigate('/login')}
+                  >
+                    Sign In
+                  </button>
+                  <button 
+                    className={styles.mobileSignupBtn}
+                    onClick={() => navigate('/register')}
+                  >
+                    <Zap size={16} />
+                    Start Free Assessment
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

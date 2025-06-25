@@ -1,7 +1,7 @@
-// App.jsx
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/useAuth';
 import Navbar from './components/Navbar/Navbar';
 import Home from './pages/Home/Home';
 import Login from './pages/Auth/Login';
@@ -43,44 +43,64 @@ const OnboardingRoute = ({ children }) => {
   return children;
 };
 
+// Add a LogoutRoute component
+const LogoutRoute = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+  
+  useEffect(() => {
+    const performLogout = async () => {
+      await logout();
+      navigate('/');
+    };
+    
+    performLogout();
+  }, [logout, navigate]);
+  
+  return <LoadingScreen />;
+};
+
 const AppContent = () => {
+  const { user } = useAuth();
+  
   return (
     <div className="page-container">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route 
-          path="/login" 
+        <Route
+          path="/login"
           element={
             <AuthRoute>
               <Login />
             </AuthRoute>
-          } 
+          }
         />
-        <Route 
-          path="/register" 
+        <Route
+          path="/register"
           element={
             <AuthRoute>
               <Register />
             </AuthRoute>
-          } 
+          }
         />
-        <Route 
-          path="/onboarding" 
+        <Route
+          path="/onboarding"
           element={
             <OnboardingRoute>
               <AdvancedOnboarding />
             </OnboardingRoute>
-          } 
+          }
         />
-        <Route 
-          path="/dashboard" 
+        <Route
+          path="/dashboard"
           element={
             <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
-          } 
+          }
         />
+        <Route path="/logout" element={<LogoutRoute />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
