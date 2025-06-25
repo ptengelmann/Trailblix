@@ -1,6 +1,8 @@
 import express from 'express';
 import User from '../models/User.js';
 import { log } from '../utils/logger.js';
+import { suggestCareers } from '../ai/careerEngine.js';
+
 
 const router = express.Router();
 
@@ -29,6 +31,23 @@ router.get('/', async (req, res) => {
   } catch (err) {
     log("❌ Error fetching users", err);
     res.status(500).json({ error: 'Could not retrieve users' });
+  }
+});
+
+router.post('/suggest', async (req, res) => {
+  try {
+    const { skills = [], interests = [] } = req.body;
+
+    const suggestions = suggestCareers(
+      skills.map((s) => s.toLowerCase()),
+      interests.map((i) => i.toLowerCase())
+    );
+
+    log("🤖 Career suggestions generated", suggestions);
+    res.json(suggestions);
+  } catch (err) {
+    log("❌ AI suggestion error", err);
+    res.status(500).json({ error: 'Career engine failed' });
   }
 });
 

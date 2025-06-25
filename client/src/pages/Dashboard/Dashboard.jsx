@@ -3,18 +3,36 @@ import styles from './dashboard.module.scss';
 
 const Dashboard = () => {
   const [user, setUser] = useState(null);
+  const [careers, setCareers] = useState([]);
 
+  // Get most recent user
   useEffect(() => {
-    // TEMPORARY: simulate fetching latest user
     fetch('/api/users')
       .then(res => res.json())
       .then(data => {
         if (Array.isArray(data) && data.length > 0) {
-          setUser(data[data.length - 1]); // grab most recent user
+          setUser(data[data.length - 1]);
         }
       })
       .catch(err => console.error('Dashboard fetch error:', err));
   }, []);
+
+  // When user is loaded, fetch AI career suggestions
+  useEffect(() => {
+    if (user) {
+      fetch('/api/users/suggest', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          skills: user.skills,
+          interests: user.interests
+        })
+      })
+        .then(res => res.json())
+        .then(data => setCareers(data))
+        .catch(err => console.error('Career suggestion error:', err));
+    }
+  }, [user]);
 
   if (!user) return <div className={styles.loading}>Loading your profile...</div>;
 
@@ -32,7 +50,17 @@ const Dashboard = () => {
 
       <div className={styles.section}>
         <h3>Career Suggestions</h3>
-        <p>(Coming soon — AI module in progress)</p>
+        {careers.length === 0 ? (
+          <p>No strong matches yet. Try refining your profile.</p>
+        ) : (
+          <ul>
+            {careers.map((c, index) => (
+              <li key={index}>
+                <strong>{c.title}</strong> — Confidence: {c.confidence}%
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className={styles.section}>
