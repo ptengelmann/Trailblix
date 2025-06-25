@@ -18,6 +18,7 @@ const UserProfileSchema = new mongoose.Schema({
   // Basic Info
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
+  password: { type: String, required: true, minlength: 6 },  // ADD THIS LINE
   avatar: String,
   
   // Professional Background

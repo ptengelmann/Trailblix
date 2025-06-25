@@ -1,0 +1,261 @@
+// src/pages/Home/components/StatsSection.module.scss
+.stats {
+  padding: 120px 0;
+  background: #0F0F23;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #00D9FF, transparent);
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+}
+
+.statsHeader {
+  text-align: center;
+  margin-bottom: 80px;
+  
+  h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 16px;
+    line-height: 1.2;
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+  
+  p {
+    font-size: 1.125rem;
+    color: rgba(255, 255, 255, 0.7);
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 40px;
+  margin-bottom: 100px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    margin-bottom: 80px;
+  }
+  
+  @media (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.statCard {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-5px);
+    border-color: rgba(0, 217, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+    
+    .statIcon {
+      transform: scale(1.1);
+      background: linear-gradient(135deg, #8A00FF, #00D9FF);
+      
+      svg {
+        color: white;
+      }
+    }
+  }
+}
+
+.statIcon {
+  width: 80px;
+  height: 80px;
+  background: rgba(0, 217, 255, 0.1);
+  border: 1px solid rgba(0, 217, 255, 0.3);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  transition: all 0.3s ease;
+  
+  svg {
+    color: #00D9FF;
+    transition: all 0.3s ease;
+  }
+}
+
+.statContent {
+  .statNumber {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    line-height: 1;
+    
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+    
+    .statSuffix {
+      font-size: 1.5rem;
+      color: #00D9FF;
+      margin-left: 4px;
+      
+      @media (max-width: 768px) {
+        font-size: 1.25rem;
+      }
+    }
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+  }
+  
+  p {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+    margin: 0;
+  }
+}
+
+.testimonialGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 40px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+}
+
+.testimonial {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 30px;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(138, 0, 255, 0.3);
+    background: rgba(255, 255, 255, 0.05);
+  }
+}
+
+.testimonialContent {
+  p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 24px;
+    font-style: italic;
+    
+    &::before {
+      content: '"';
+      font-size: 2rem;
+      color: #00D9FF;
+      line-height: 1;
+    }
+    
+    &::after {
+      content: '"';
+      font-size: 2rem;
+      color: #00D9FF;
+      line-height: 1;
+    }
+  }
+}
+
+.testimonialAuthor {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  
+  .authorAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8A00FF, #00D9FF);
+  }
+  
+  strong {
+    display: block;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  
+  span {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats {
+    padding: 80px 0;
+  }
+  
+  .statsHeader {
+    margin-bottom: 60px;
+    
+    h2 {
+      font-size: 1.75rem;
+    }
+  }
+  
+  .statCard {
+    padding: 30px 16px;
+  }
+  
+  .statIcon {
+    width: 60px;
+    height: 60px;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+  
+  .testimonialGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .testimonial {
+    padding: 24px;
+  }
+}

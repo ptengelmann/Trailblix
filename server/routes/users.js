@@ -2,6 +2,7 @@
 import express from 'express';
 import User from '../models/User.js';
 import { log } from '../utils/logger.js';
+import { authenticateToken } from '../middleware/auth.js';
 import { suggestCareers, advancedCareerEngine } from '../ai/advancedCareerEngine.js';
 
 const router = express.Router();
@@ -29,49 +30,52 @@ router.post('/', async (req, res) => {
   }
 });
 
-// In your /api/users/profile route, make sure you're setting onboardingCompleted
-router.post('/profile', async (req, res) => {
+router.post('/profile', authenticateToken, async (req, res) => {
   try {
     const profileData = req.body;
-    log("📩 Advanced profile submission", profileData);
+    const userId = req.user._id;
+    
+    log("📩 Advanced profile submission", { userId, profileData });
 
-    const enhancedUser = new User({
-      name: profileData.name,
-      email: profileData.email,
-      currentRole: profileData.currentRole,
-      yearsOfExperience: profileData.yearsOfExperience || 0,
-      education: profileData.education || {},
-      skills: profileData.skills || [],
-      interests: profileData.interests || [],
-      personality: profileData.personality || [],
-      workValues: profileData.workValues || [],
-      careerGoals: profileData.careerGoals || [],
-      preferences: profileData.preferences || {},
-      onboardingCompleted: true // Make sure this is set
-    });
+    // Update the existing user instead of creating new one
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        currentRole: profileData.currentRole,
+        yearsOfExperience: profileData.yearsOfExperience || 0,
+        education: profileData.education || {},
+        skills: profileData.skills || [],
+        interests: profileData.interests || [],
+        personality: profileData.personality || [],
+        workValues: profileData.workValues || [],
+        careerGoals: profileData.careerGoals || [],
+        preferences: profileData.preferences || {},
+        onboardingCompleted: true
+      },
+      { new: true, runValidators: true }
+    );
 
-    await enhancedUser.save();
-    log("✅ Enhanced profile saved", enhancedUser._id);
+    log("✅ Enhanced profile updated", updatedUser._id);
 
     // Generate career recommendations
     const careerMatches = advancedCareerEngine.generateCareerMatches(profileData);
     
-    enhancedUser.careerRecommendations = careerMatches.slice(0, 5).map(match => ({
+    updatedUser.careerRecommendations = careerMatches.slice(0, 5).map(match => ({
       careerId: match.id,
       confidence: match.confidence,
       generatedAt: new Date()
     }));
     
-    await enhancedUser.save();
+    await updatedUser.save();
 
-    res.status(201).json({
-      user: enhancedUser,
+    res.status(200).json({
+      user: updatedUser,
       careerRecommendations: careerMatches.slice(0, 8)
     });
 
   } catch (err) {
-    log("❌ Error creating enhanced profile", err);
-    res.status(500).json({ error: 'Enhanced profile creation failed', details: err.message });
+    log("❌ Error updating enhanced profile", err);
+    res.status(500).json({ error: 'Enhanced profile update failed', details: err.message });
   }
 });
 

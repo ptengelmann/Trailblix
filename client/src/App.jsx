@@ -1,99 +1,95 @@
 // App.jsx
 import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Home from './pages/Home/Home';
+import Login from './pages/Auth/Login';
+import Register from './pages/Auth/Register';
 import AdvancedOnboarding from './pages/Onboarding/AdvancedOnboarding';
 import Dashboard from './pages/Dashboard/Dashboard';
+import LoadingScreen from './components/LoadingScreen/LoadingScreen';
+
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) return <LoadingScreen />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user && !user.onboardingCompleted) return <Navigate to="/onboarding" replace />;
+  
+  return children;
+};
+
+// Auth Route Component (redirect if already logged in)
+const AuthRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) return <LoadingScreen />;
+  if (user && user.onboardingCompleted) return <Navigate to="/dashboard" replace />;
+  if (user && !user.onboardingCompleted) return <Navigate to="/onboarding" replace />;
+  
+  return children;
+};
+
+// Onboarding Route Component
+const OnboardingRoute = ({ children }) => {
+  const { user, loading } = useAuth();
+  
+  if (loading) return <LoadingScreen />;
+  if (!user) return <Navigate to="/login" replace />;
+  if (user && user.onboardingCompleted) return <Navigate to="/dashboard" replace />;
+  
+  return children;
+};
+
+const AppRoutes = () => {
+  return (
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route 
+        path="/login" 
+        element={
+          <AuthRoute>
+            <Login />
+          </AuthRoute>
+        } 
+      />
+      <Route 
+        path="/register" 
+        element={
+          <AuthRoute>
+            <Register />
+          </AuthRoute>
+        } 
+      />
+      <Route 
+        path="/onboarding" 
+        element={
+          <OnboardingRoute>
+            <AdvancedOnboarding />
+          </OnboardingRoute>
+        } 
+      />
+      <Route 
+        path="/dashboard" 
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        } 
+      />
+      <Route path="*" element={<Navigate to="/" replace />} />
+    </Routes>
+  );
+};
 
 const App = () => {
-  const [currentView, setCurrentView] = useState('loading');
-  const [user, setUser] = useState(null);
-
-  // Check if user exists on app load
-  useEffect(() => {
-    checkExistingUser();
-  }, []);
-
-  const checkExistingUser = async () => {
-    try {
-      const response = await fetch('/api/users');
-      const users = await response.json();
-      
-      if (Array.isArray(users) && users.length > 0) {
-        // Find the most recent user with completed onboarding
-        const completedUser = users.find(user => user.onboardingCompleted);
-        
-        if (completedUser) {
-          setUser(completedUser);
-          setCurrentView('dashboard');
-        } else {
-          // User exists but hasn't completed onboarding
-          setCurrentView('onboarding');
-        }
-      } else {
-        // No users found, start onboarding
-        setCurrentView('onboarding');
-      }
-    } catch (error) {
-      console.error('Error checking for existing user:', error);
-      // Default to onboarding if there's an error
-      setCurrentView('onboarding');
-    }
-  };
-
-  const handleOnboardingComplete = (userData) => {
-    console.log('Onboarding completed for:', userData);
-    setUser(userData.user || userData);
-    setCurrentView('dashboard');
-  };
-
-  const handleReturnToOnboarding = () => {
-    setUser(null);
-    setCurrentView('onboarding');
-  };
-
-  // Loading state
-  if (currentView === 'loading') {
-    return (
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        color: 'white',
-        fontFamily: 'system-ui, sans-serif'
-      }}>
-        <div style={{
-          width: '40px',
-          height: '40px',
-          border: '4px solid rgba(255,255,255,0.3)',
-          borderTop: '4px solid white',
-          borderRadius: '50%',
-          animation: 'spin 1s linear infinite',
-          marginBottom: '1rem'
-        }} />
-        <p>Loading Trailblix...</p>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
-      </div>
-    );
-  }
-
   return (
-    <main>
-      {currentView === 'onboarding' ? (
-        <AdvancedOnboarding onComplete={handleOnboardingComplete} />
-      ) : (
-        <Dashboard 
-          user={user} 
-          onReturnToOnboarding={handleReturnToOnboarding}
-        />
-      )}
-    </main>
+    <Router>
+      <AuthProvider>
+        <AppRoutes />
+      </AuthProvider>
+    </Router>
   );
 };
 

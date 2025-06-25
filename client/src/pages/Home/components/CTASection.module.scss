@@ -1,0 +1,316 @@
+// src/pages/Home/components/CTASection.module.scss
+.cta {
+  padding: 120px 0;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.ctaBackground {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  
+  .gradientOrb1, .gradientOrb2 {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.3;
+  }
+  
+  .gradientOrb1 {
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, #8A00FF 0%, transparent 70%);
+    top: -25%;
+    left: -10%;
+    animation: float 25s ease-in-out infinite;
+  }
+  
+  .gradientOrb2 {
+    width: 400px;
+    height: 400px;
+    background: radial-gradient(circle, #00D9FF 0%, transparent 70%);
+    bottom: -20%;
+    right: -10%;
+    animation: float 25s ease-in-out infinite 12s;
+  }
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+  position: relative;
+  z-index: 10;
+  
+  @media (max-width: 768px) {
+    padding: 0 20px;
+  }
+}
+
+.ctaContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  
+  @media (max-width: 968px) {
+    grid-template-columns: 1fr;
+    gap: 60px;
+    text-align: center;
+  }
+}
+
+.ctaHeader {
+  .ctaTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #00D9FF;
+    margin-bottom: 24px;
+    
+    svg {
+      color: #8A00FF;
+    }
+  }
+  
+  h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 24px;
+    line-height: 1.1;
+    
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+    
+    .gradient {
+      background: linear-gradient(135deg, #00D9FF, #8A00FF);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+  }
+  
+  p {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 40px;
+  }
+}
+
+.ctaActions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+  
+  @media (max-width: 968px) {
+    align-items: center;
+  }
+}
+
+.primaryCTA {
+  background: linear-gradient(135deg, #8A00FF, #00D9FF);
+  border: none;
+  color: white;
+  padding: 18px 36px;
+  border-radius: 12px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 280px;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 40px rgba(138, 0, 255, 0.4);
+  }
+  
+  @media (max-width: 968px) {
+    max-width: none;
+    width: 100%;
+    max-width: 320px;
+  }
+}
+
+.secondaryCTA {
+ background: transparent;
+ border: none;
+ color: rgba(255, 255, 255, 0.8);
+ padding: 12px 0;
+ font-size: 1rem;
+ font-weight: 500;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ text-decoration: underline;
+ text-underline-offset: 4px;
+ 
+ &:hover {
+   color: #00D9FF;
+ }
+}
+
+.ctaFeatures {
+ display: flex;
+ gap: 30px;
+ 
+ @media (max-width: 968px) {
+   justify-content: center;
+ }
+ 
+ @media (max-width: 768px) {
+   flex-wrap: wrap;
+   gap: 20px;
+ }
+}
+
+.ctaFeature {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ color: rgba(255, 255, 255, 0.7);
+ font-size: 0.875rem;
+ font-weight: 500;
+ 
+ svg {
+   color: #00D9FF;
+ }
+}
+
+.ctaVisual {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ 
+ @media (max-width: 968px) {
+   order: -1;
+ }
+}
+
+.floatingElements {
+ position: relative;
+ width: 300px;
+ height: 300px;
+}
+
+.floatingCard {
+ position: absolute;
+ background: rgba(255, 255, 255, 0.05);
+ backdrop-filter: blur(20px);
+ border: 1px solid rgba(255, 255, 255, 0.1);
+ border-radius: 16px;
+ padding: 20px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ min-width: 200px;
+ transition: all 0.3s ease;
+ 
+ &:nth-child(1) {
+   top: 0;
+   left: 0;
+   animation: float 6s ease-in-out infinite;
+ }
+ 
+ &:nth-child(2) {
+   top: 50%;
+   right: 0;
+   transform: translateY(-50%);
+   animation: float 6s ease-in-out infinite 2s;
+ }
+ 
+ &:nth-child(3) {
+   bottom: 0;
+   left: 50%;
+   transform: translateX(-50%);
+   animation: float 6s ease-in-out infinite 4s;
+ }
+ 
+ &:hover {
+   transform: translateY(-5px);
+   border-color: rgba(0, 217, 255, 0.3);
+ }
+ 
+ .cardIcon {
+   width: 40px;
+   height: 40px;
+   background: linear-gradient(135deg, #8A00FF, #00D9FF);
+   border-radius: 8px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   
+   svg {
+     color: white;
+   }
+ }
+ 
+ .cardContent {
+   h4 {
+     font-size: 0.875rem;
+     font-weight: 600;
+     color: white;
+     margin: 0 0 4px 0;
+   }
+   
+   p {
+     font-size: 0.75rem;
+     color: #00D9FF;
+     margin: 0;
+     font-weight: 500;
+   }
+ }
+}
+
+@keyframes float {
+ 0%, 100% { transform: translateY(0px); }
+ 50% { transform: translateY(-15px); }
+}
+
+@media (max-width: 480px) {
+ .cta {
+   padding: 80px 0;
+ }
+ 
+ .ctaContent {
+   gap: 40px;
+ }
+ 
+ .ctaHeader h2 {
+   font-size: 2rem;
+ }
+ 
+ .floatingElements {
+   width: 250px;
+   height: 250px;
+ }
+ 
+ .floatingCard {
+   min-width: 180px;
+   padding: 16px;
+   
+   .cardIcon {
+     width: 35px;
+     height: 35px;
+     
+     svg {
+       width: 18px;
+       height: 18px;
+     }
+   }
+ }
+}

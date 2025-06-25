@@ -130,22 +130,26 @@ const AdvancedOnboarding = ({ onComplete }) => {
     setUserData(prev => ({ ...prev, ...stepData }));
   };
 
-  const submitProfile = async () => {
-    try {
-      const response = await fetch('/api/users/profile', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData)
-      });
-      
-      if (response.ok) {
-        const user = await response.json();
-        onComplete(user);
-      }
-    } catch (error) {
-      console.error('Profile submission failed:', error);
+const submitProfile = async () => {
+  try {
+    const token = localStorage.getItem('trailblix_token');
+    const response = await fetch('/api/users/profile', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify(userData)
+    });
+    
+    if (response.ok) {
+      const result = await response.json();
+      onComplete(result);
     }
-  };
+  } catch (error) {
+    console.error('Profile submission failed:', error);
+  }
+};
 
   const progress = ((currentStep + 1) / ONBOARDING_STEPS.length) * 100;
   const currentStepData = ONBOARDING_STEPS[currentStep];
