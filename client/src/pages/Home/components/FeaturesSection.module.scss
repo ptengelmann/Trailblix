@@ -1,0 +1,30 @@
+.features {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  text-align: center;
+
+  h2 {
+    font-size: 2rem;
+    color: #002b5b;
+    margin-bottom: 1.5rem;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+
+    li {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    svg {
+      stroke: #8a00ff;
+    }
+  }
+}
